@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Image to Base64 Converter</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #0f172a;
+      color: white;
+      text-align: center;
+      padding: 40px;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+    }
+
+    input {
+      width: 60%;
+      padding: 10px;
+      border-radius: 8px;
+      border: none;
+      outline: none;
+      margin-bottom: 10px;
+    }
+
+    button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      background: #22c55e;
+      color: black;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #16a34a;
+    }
+
+    textarea {
+      width: 90%;
+      height: 200px;
+      margin-top: 20px;
+      border-radius: 10px;
+      padding: 10px;
+      border: none;
+      outline: none;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🖼️ Image → Base64 Converter</h1>
+
+  <input type="text" id="imageUrl" placeholder="Paste image URL here..." />
+  <br>
+  <button onclick="convertImage()">Convert</button>
+
+  <textarea id="output" placeholder="Base64 result will appear here..."></textarea>
+
+  <script>
+    async function convertImage() {
+      const url = document.getElementById("imageUrl").value;
+      const output = document.getElementById("output");
+
+      if (!url) {
+        alert("Please enter an image URL");
+        return;
+      }
+
+      try {
+        const response = await fetch(url);
+        const blob = await response.blob();
+
+        const reader = new FileReader();
+        reader.onloadend = function () {
+          output.value = reader.result;
+        };
+
+        reader.readAsDataURL(blob);
+      } catch (error) {
+        output.value = "❌ Error: Could not fetch image.\n\n" +
+                       "Possible reasons:\n" +
+                       "- CORS blocked\n" +
+                       "- Invalid URL\n" +
+                       "- Using Google thumbnail (gstatic)";
+      }
+    }
+  </script>
+
+</body>
+</html>
